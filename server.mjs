@@ -53,6 +53,7 @@ function validateConfig(input, current) {
     capitalUsd: [10, 10_000_000],
     minProfitUsd: [-10_000, 1_000_000],
     minProfitPercent: [-100, 10_000],
+    maxSpreadPercent: [0.1, 100],
     slippagePercent: [0, 20],
     minLiquidityUsd: [0, 1_000_000_000],
     scanIntervalSeconds: [5, 3600],

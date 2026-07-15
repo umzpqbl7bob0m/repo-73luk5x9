@@ -2,6 +2,7 @@
   "capitalUsd": 1000,
   "minProfitUsd": 1,
   "minProfitPercent": 0.1,
+  "maxSpreadPercent": 15,
   "slippagePercent": 0.08,
   "minLiquidityUsd": 50000,
   "scanIntervalSeconds": 30,

@@ -55,6 +55,7 @@ npm run check
 | `capitalUsd` | капитал одной расчетной сделки |
 | `minProfitUsd` | минимальный абсолютный порог сигнала |
 | `minProfitPercent` | минимальный процентный порог |
+| `maxSpreadPercent` | отсекает вероятные совпадения разных токенов с одинаковым тикером |
 | `slippagePercent` | slippage на каждую операцию |
 | `minLiquidityUsd` | минимальная DEX-ликвидность |
 | `scanIntervalSeconds` | период обновления |

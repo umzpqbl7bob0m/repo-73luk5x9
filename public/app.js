@@ -256,7 +256,7 @@ function renderFees() {
 
 function renderSettings() {
   const form = $("#settings-form");
-  ["capitalUsd", "minProfitUsd", "minProfitPercent", "slippagePercent", "minLiquidityUsd", "scanIntervalSeconds"]
+  ["capitalUsd", "minProfitUsd", "minProfitPercent", "maxSpreadPercent", "slippagePercent", "minLiquidityUsd", "scanIntervalSeconds"]
     .forEach((name) => {
       form.elements[name].value = state.config[name];
     });
@@ -308,6 +308,7 @@ async function saveSettings(event) {
     capitalUsd: Number(form.get("capitalUsd")),
     minProfitUsd: Number(form.get("minProfitUsd")),
     minProfitPercent: Number(form.get("minProfitPercent")),
+    maxSpreadPercent: Number(form.get("maxSpreadPercent")),
     slippagePercent: Number(form.get("slippagePercent")),
     minLiquidityUsd: Number(form.get("minLiquidityUsd")),
     scanIntervalSeconds: Number(form.get("scanIntervalSeconds")),

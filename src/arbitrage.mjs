@@ -30,6 +30,8 @@ export function calculateTrade({
   const sellFeeUsd = (grossSaleUsd - sellSlippageUsd) * (sellTakerPercent / 100);
   const finalUsd = grossSaleUsd - sellSlippageUsd - sellFeeUsd - networkCostUsd;
   const profitUsd = finalUsd - capitalUsd;
+  const withdrawalUsd = withdrawalAsset * sellPrice;
+  const slippageUsd = slippageAsset * buyPrice + sellSlippageUsd;
 
   return {
     purchasedAsset,
@@ -41,10 +43,10 @@ export function calculateTrade({
     costs: {
       buyFeeUsd,
       sellFeeUsd,
-      slippageUsd: slippageAsset * buyPrice + sellSlippageUsd,
-      withdrawalUsd: withdrawalAsset * sellPrice,
+      slippageUsd,
+      withdrawalUsd,
       networkCostUsd,
-      totalUsd: capitalUsd + grossSaleUsd - finalUsd - capitalUsd
+      totalUsd: buyFeeUsd + sellFeeUsd + slippageUsd + withdrawalUsd + networkCostUsd
     }
   };
 }
@@ -81,6 +83,9 @@ export function findOpportunities(quotes, fees, config) {
     for (const buy of assetQuotes) {
       for (const sell of assetQuotes) {
         if (buy.source === sell.source || sell.bid <= buy.ask) continue;
+        if (buy.liquidityUsd < config.minLiquidityUsd || sell.liquidityUsd < config.minLiquidityUsd) continue;
+        const grossSpreadPercent = ((sell.bid - buy.ask) / buy.ask) * 100;
+        if (grossSpreadPercent < 0.02 || grossSpreadPercent > config.maxSpreadPercent) continue;
         const buyFee = feeFor(buy.source, fees);
         const sellFee = feeFor(sell.source, fees);
         const withdrawalAsset = buy.venueType === "dex" ? 0 : withdrawalFor(buyFee, base);
@@ -96,9 +101,6 @@ export function findOpportunities(quotes, fees, config) {
           withdrawalAsset,
           networkCostUsd
         });
-        const grossSpreadPercent = ((sell.bid - buy.ask) / buy.ask) * 100;
-        if (grossSpreadPercent < 0.02) continue;
-
         const transferMinutes = Math.max(buyFee.transferMinutes, sellFee.transferMinutes);
         const opportunity = {
           id: `${base}-${buy.source}-${sell.source}`,
