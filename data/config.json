@@ -1,0 +1,45 @@
+{
+  "capitalUsd": 1000,
+  "minProfitUsd": 1,
+  "minProfitPercent": 0.1,
+  "slippagePercent": 0.08,
+  "minLiquidityUsd": 50000,
+  "scanIntervalSeconds": 30,
+  "requestTimeoutMs": 8000,
+  "demoFallback": true,
+  "enabledSources": [
+    "binance",
+    "okx",
+    "bybit",
+    "gate",
+    "kucoin",
+    "dexscreener"
+  ],
+  "networkCostsUsd": {
+    "default": 1.5,
+    "multi": 1.5,
+    "ethereum": 7,
+    "solana": 0.03,
+    "bsc": 0.2,
+    "arbitrum": 0.15,
+    "base": 0.1,
+    "polygon": 0.08
+  },
+  "dexWatchlist": [
+    {
+      "chainId": "ethereum",
+      "tokenAddress": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+      "symbol": "WETH"
+    },
+    {
+      "chainId": "solana",
+      "tokenAddress": "So11111111111111111111111111111111111111112",
+      "symbol": "SOL"
+    },
+    {
+      "chainId": "ethereum",
+      "tokenAddress": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
+      "symbol": "LINK"
+    }
+  ]
+}

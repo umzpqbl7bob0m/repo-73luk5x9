@@ -1,0 +1,17 @@
+{
+  "name": "atlas-arbitrage-scanner",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Read-only CEX and DEX cryptocurrency arbitrage scanner",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --watch server.mjs",
+    "test": "node --test",
+    "lint": "node scripts/lint.mjs",
+    "check": "node --check server.mjs && node --check src/arbitrage.mjs && node --check src/connectors/index.mjs && node --check public/app.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

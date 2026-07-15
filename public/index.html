@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Atlas — CEX и DEX крипто-арбитражный сканер">
+    <title>Atlas Arbitrage</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#" aria-label="Atlas Arbitrage">
+          <span class="brand-mark">A</span>
+          <span><strong>ATLAS</strong><small>ARBITRAGE</small></span>
+        </a>
+        <nav class="nav" aria-label="Основная навигация">
+          <button class="nav-item active" data-view="dashboard"><span>⌁</span>Обзор</button>
+          <button class="nav-item" data-view="signals"><span>↗</span>Сигналы</button>
+          <button class="nav-item" data-view="calculator"><span>∑</span>Калькулятор</button>
+          <button class="nav-item" data-view="fees"><span>◎</span>Комиссии</button>
+          <button class="nav-item" data-view="settings"><span>⚙</span>Настройки</button>
+        </nav>
+        <div class="sidebar-card">
+          <span class="pulse"></span>
+          <div><strong id="sidebar-status">Подключение</strong><small id="sidebar-sources">Источники загружаются</small></div>
+        </div>
+        <div class="sidebar-footer">
+          <span>READ-ONLY MODE</span>
+          <small>Без торговых ключей</small>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">GLOBAL MARKET INTELLIGENCE</p>
+            <h1 id="page-title">Арбитражный обзор</h1>
+          </div>
+          <div class="topbar-actions">
+            <span class="updated" id="updated-at">Еще не сканировалось</span>
+            <button class="button secondary" id="refresh-button">Обновить</button>
+            <button class="button primary" data-view-jump="settings">Настроить сканер</button>
+          </div>
+        </header>
+
+        <div class="notice hidden" id="demo-notice">
+          <strong>Демо-режим.</strong> Недостаточно доступных внешних источников; показаны тестовые котировки.
+        </div>
+        <div class="notice risk-notice">
+          <strong>Расчет, не гарантия.</strong> Перед сделкой проверьте ликвидность, сети ввода/вывода и актуальные комиссии.
+        </div>
+
+        <section class="view active" id="view-dashboard">
+          <div class="metric-grid">
+            <article class="metric-card">
+              <span class="metric-icon purple">↯</span>
+              <div><small>Найдено сигналов</small><strong id="metric-signals">—</strong><em id="metric-profitable">ожидание данных</em></div>
+            </article>
+            <article class="metric-card">
+              <span class="metric-icon green">$</span>
+              <div><small>Лучшая net-прибыль</small><strong id="metric-profit">—</strong><em id="metric-profit-percent">после комиссий</em></div>
+            </article>
+            <article class="metric-card">
+              <span class="metric-icon blue">◫</span>
+              <div><small>Покрытие рынка</small><strong id="metric-assets">—</strong><em id="metric-quotes">котировки загружаются</em></div>
+            </article>
+            <article class="metric-card">
+              <span class="metric-icon orange">◷</span>
+              <div><small>Скорость сканирования</small><strong id="metric-speed">—</strong><em>полный цикл</em></div>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <section class="panel market-panel">
+              <div class="panel-heading">
+                <div><p class="eyebrow">LIVE OPPORTUNITIES</p><h2>Лучшие маршруты</h2></div>
+                <button class="text-button" data-view-jump="signals">Все сигналы →</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Актив</th><th>Маршрут</th><th>Спред</th><th>Net P&L</th><th>Время</th><th></th></tr></thead>
+                  <tbody id="dashboard-opportunities"></tbody>
+                </table>
+              </div>
+              <div class="empty-state hidden" id="dashboard-empty">Нет маршрутов с положительным спредом. Обновите сканирование позже.</div>
+            </section>
+
+            <aside class="panel sources-panel">
+              <div class="panel-heading"><div><p class="eyebrow">DATA SOURCES</p><h2>Подключения</h2></div></div>
+              <div class="source-list" id="source-list"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="view-signals">
+          <div class="panel">
+            <div class="panel-heading signals-heading">
+              <div><p class="eyebrow">CEX + DEX ROUTES</p><h2>Все арбитражные сигналы</h2></div>
+              <div class="filters">
+                <label><span>Поиск актива</span><input id="signal-search" type="search" placeholder="BTC, ETH, SOL…"></label>
+                <label><span>Статус</span><select id="signal-filter"><option value="all">Все</option><option value="profitable">Только прибыльные</option><option value="high">Высокая уверенность</option></select></label>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="signals-table">
+                <thead><tr><th>Актив</th><th>Купить</th><th>Продать</th><th>Gross</th><th>Расходы</th><th>Net P&L</th><th>Оценка</th><th></th></tr></thead>
+                <tbody id="all-opportunities"></tbody>
+              </table>
+            </div>
+            <div class="empty-state hidden" id="signals-empty">По заданным фильтрам сигналов нет.</div>
+          </div>
+        </section>
+
+        <section class="view" id="view-calculator">
+          <div class="two-column">
+            <form class="panel form-panel" id="calculator-form">
+              <div class="panel-heading"><div><p class="eyebrow">WHAT-IF ANALYSIS</p><h2>Калькулятор сделки</h2></div></div>
+              <div class="form-grid">
+                <label><span>Капитал, USD</span><input name="capitalUsd" type="number" min="1" step="0.01" value="1000" required></label>
+                <label><span>Цена покупки</span><input name="buyPrice" type="number" min="0.00000001" step="any" value="100" required></label>
+                <label><span>Цена продажи</span><input name="sellPrice" type="number" min="0.00000001" step="any" value="103" required></label>
+                <label><span>Комиссия покупки, %</span><input name="buyTakerPercent" type="number" min="0" step="0.01" value="0.1" required></label>
+                <label><span>Комиссия продажи, %</span><input name="sellTakerPercent" type="number" min="0" step="0.01" value="0.1" required></label>
+                <label><span>Slippage на операцию, %</span><input name="slippagePercent" type="number" min="0" step="0.01" value="0.08" required></label>
+                <label><span>Комиссия вывода, монет</span><input name="withdrawalAsset" type="number" min="0" step="any" value="0.001" required></label>
+                <label><span>Газ / сеть, USD</span><input name="networkCostUsd" type="number" min="0" step="0.01" value="1.5" required></label>
+              </div>
+              <button class="button primary full" type="submit">Рассчитать чистую прибыль</button>
+            </form>
+            <section class="panel result-panel">
+              <p class="eyebrow">NET RESULT</p>
+              <div class="result-hero"><small>Ожидаемая прибыль</small><strong id="calc-profit">$0.00</strong><em id="calc-percent">0.00%</em></div>
+              <div class="cost-breakdown" id="cost-breakdown"></div>
+              <p class="fine-print">Модель предполагает исполнение по указанным ценам. Funding, bridge fees и изменение курса во время перевода не включены.</p>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-fees">
+          <div class="panel">
+            <div class="panel-heading"><div><p class="eyebrow">FEE DATABASE</p><h2>База торговых комиссий</h2></div><span class="tag">Редактируется в data/fees.json</span></div>
+            <div class="fee-grid" id="fee-grid"></div>
+            <p class="fine-print">Комиссии являются стартовыми справочными значениями. Уровень аккаунта, VIP-скидки, выбранная сеть и текущая загрузка блокчейна меняют итоговую стоимость.</p>
+          </div>
+        </section>
+
+        <section class="view" id="view-settings">
+          <form class="settings-layout" id="settings-form">
+            <section class="panel form-panel">
+              <div class="panel-heading"><div><p class="eyebrow">SCANNER CONTROL</p><h2>Параметры расчета</h2></div></div>
+              <div class="form-grid">
+                <label><span>Капитал сделки, USD</span><input name="capitalUsd" type="number" min="10" step="10"></label>
+                <label><span>Минимальная прибыль, USD</span><input name="minProfitUsd" type="number" step="0.1"></label>
+                <label><span>Минимальная прибыль, %</span><input name="minProfitPercent" type="number" step="0.01"></label>
+                <label><span>Slippage, %</span><input name="slippagePercent" type="number" min="0" step="0.01"></label>
+                <label><span>Мин. DEX ликвидность, USD</span><input name="minLiquidityUsd" type="number" min="0" step="1000"></label>
+                <label><span>Интервал сканирования, сек.</span><input name="scanIntervalSeconds" type="number" min="5" step="5"></label>
+              </div>
+              <h3>Источники котировок</h3>
+              <div class="exchange-grid" id="exchange-toggles"></div>
+            </section>
+            <section class="panel form-panel">
+              <div class="panel-heading"><div><p class="eyebrow">DEX WATCHLIST</p><h2>Токены и сети</h2></div></div>
+              <div id="dex-watchlist" class="watchlist"></div>
+              <div class="add-token">
+                <input id="new-token-symbol" placeholder="Символ: LINK">
+                <input id="new-token-chain" placeholder="Сеть: ethereum">
+                <input id="new-token-address" placeholder="Адрес контракта">
+                <button class="button secondary" type="button" id="add-token">Добавить токен</button>
+              </div>
+              <label class="switch-row"><span><strong>Демо fallback</strong><small>Показывать тестовые данные, если API недоступны</small></span><input name="demoFallback" type="checkbox"></label>
+              <button class="button primary full" type="submit">Сохранить и пересканировать</button>
+              <p class="save-status" id="save-status"></p>
+            </section>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="opportunity-dialog">
+      <div class="dialog-header">
+        <div><p class="eyebrow">EXECUTION PLAN</p><h2 id="dialog-title">Маршрут</h2></div>
+        <button class="close-button" id="close-dialog" aria-label="Закрыть">×</button>
+      </div>
+      <div class="dialog-summary" id="dialog-summary"></div>
+      <ol class="instruction-list" id="instruction-list"></ol>
+      <div class="dialog-warning">Не отправляйте средства, пока не подтверждены одинаковая сеть, memo/tag и доступность депозита.</div>
+    </dialog>
+
+    <div class="toast hidden" id="toast" role="status"></div>
+    <script src="/app.js" defer></script>
+  </body>
+</html>

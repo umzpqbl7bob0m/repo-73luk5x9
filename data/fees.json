@@ -1,0 +1,81 @@
+{
+  "binance": {
+    "label": "Binance",
+    "makerPercent": 0.1,
+    "takerPercent": 0.1,
+    "transferMinutes": 12,
+    "withdrawal": {
+      "BTC": 0.0001,
+      "ETH": 0.0008,
+      "SOL": 0.008,
+      "USDT": 1,
+      "USDC": 1,
+      "default": 0
+    }
+  },
+  "okx": {
+    "label": "OKX",
+    "makerPercent": 0.08,
+    "takerPercent": 0.1,
+    "transferMinutes": 12,
+    "withdrawal": {
+      "BTC": 0.0001,
+      "ETH": 0.0005,
+      "SOL": 0.008,
+      "USDT": 1,
+      "USDC": 1,
+      "default": 0
+    }
+  },
+  "bybit": {
+    "label": "Bybit",
+    "makerPercent": 0.1,
+    "takerPercent": 0.1,
+    "transferMinutes": 15,
+    "withdrawal": {
+      "BTC": 0.0002,
+      "ETH": 0.0006,
+      "SOL": 0.01,
+      "USDT": 1,
+      "USDC": 1,
+      "default": 0
+    }
+  },
+  "gate": {
+    "label": "Gate.io",
+    "makerPercent": 0.1,
+    "takerPercent": 0.1,
+    "transferMinutes": 18,
+    "withdrawal": {
+      "BTC": 0.0002,
+      "ETH": 0.0015,
+      "SOL": 0.02,
+      "USDT": 1.5,
+      "USDC": 1.5,
+      "default": 0
+    }
+  },
+  "kucoin": {
+    "label": "KuCoin",
+    "makerPercent": 0.1,
+    "takerPercent": 0.1,
+    "transferMinutes": 18,
+    "withdrawal": {
+      "BTC": 0.0002,
+      "ETH": 0.001,
+      "SOL": 0.01,
+      "USDT": 1,
+      "USDC": 1,
+      "default": 0
+    }
+  },
+  "dex": {
+    "label": "DEX",
+    "makerPercent": 0.3,
+    "takerPercent": 0.3,
+    "transferMinutes": 5,
+    "withdrawal": {
+      "default": 0
+    }
+  }
+}
